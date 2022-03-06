@@ -11,3 +11,4 @@ resources/hevestarvey.png
 resources/seahorse.png
 resources/shaders/base_lighting.vs
 resources/shaders/lighting.fs
+lib/raylib
