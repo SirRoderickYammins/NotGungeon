@@ -25,7 +25,7 @@ int main(void)
 
     
 
-    SetTargetFPS(60);
+    SetTargetFPS(144);
 
     SetMouseCursor(MOUSE_CURSOR_CROSSHAIR);
     SetMouseScale(1.0, 1.0);
