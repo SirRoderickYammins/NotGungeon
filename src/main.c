@@ -40,7 +40,9 @@ int main(void)
         DrawRectanglePro(player.playerRect, player.origin, 0.0f, RED);
         DrawRing(player.gunArc.origin, player.gunArc.innerRadius, player.gunArc.outerRadius, 
                 player.gunArc.startAngle, player.gunArc.endAngle, 40, RED);
-        PosUpdate(&player, RoomBoundaries, frameTime);
+
+
+        PlayerControl(&player, RoomBoundaries, frameTime);
 
        
         

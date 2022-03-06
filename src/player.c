@@ -5,15 +5,40 @@
 
 
 
-
-
-
-float RotationCalculator(Vector2 gunArcCenter){
+/* Calculate the lengths of the sides of a right triangle between
+the mouse cursor and the center of the player. */
+Vector2 MouseDelta(Vector2 gunArcCenter){  
 
     Vector2 mousePosition = GetMousePosition();
 
     float dx = mousePosition.x - gunArcCenter.x;
     float dy = gunArcCenter.y - mousePosition.y;
+
+    return (Vector2){dx, dy};
+
+}
+
+void WeaponFire(Circle gunArc) {
+
+    Vector2 triangleCoord = MouseDelta(gunArc.origin);
+
+    Vector2 hypotenuse = {gunArc.origin.x - gunArc.outerRadius, gunArc.origin.y - gunArc.outerRadius};
+
+
+
+
+
+}
+
+
+
+
+float RotationCalculator(Vector2 gunArcCenter){
+
+    Vector2 mouseDelta = MouseDelta(gunArcCenter);
+
+    float dx = mouseDelta.x;
+    float dy = mouseDelta.y;
 
     float angle;
     // Quadrant 1 of unit cirlce
@@ -32,7 +57,7 @@ float RotationCalculator(Vector2 gunArcCenter){
     if (dx > 0 && dy < 0) {
         angle = atanf(dy/dx) * (180/PI) + 90.0f;
     }
-    
+
     return angle;
 
 }
@@ -40,7 +65,7 @@ float RotationCalculator(Vector2 gunArcCenter){
 
 
 
-void PosUpdate(Player *player, Rectangle RoomBoundaries, float frameTime) {
+void PlayerControl(Player *player, Rectangle RoomBoundaries, float frameTime) {
     // Establish coordinates for the CheckCollision fx to compare
     Vector2 playerPosLeft = {player->playerRect.x, player->playerRect.y + player->playerRect.height/2};
     Vector2 playerPosTop = {player->playerRect.x + player->playerRect.width/2, player->playerRect.y};
@@ -69,8 +94,17 @@ void PosUpdate(Player *player, Rectangle RoomBoundaries, float frameTime) {
         player->gunArc.origin.y += 500.0f * frameTime;
     }
 
-
-
     player->gunArc.endAngle = RotationCalculator(player->gunArc.origin);
+
+
+
+
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        WeaponFire(player->gunArc);
+    }
+
+
+
+    
     
 }

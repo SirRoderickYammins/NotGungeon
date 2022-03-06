@@ -20,4 +20,4 @@ typedef struct Player {
 
 } Player;
 
-void PosUpdate(Player *player, Rectangle RoomBoundaries, float frameTime);
+void PlayerControl(Player *player, Rectangle RoomBoundaries, float frameTime);

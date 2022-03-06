@@ -1,0 +1,13 @@
+.DS_Store
+.vscode/launch.json
+.vscode/settings.json
+.vscode/tasks.json
+bin/game
+lib/.DS_Store
+resources/.DS_Store
+resources/forestgrass.png
+resources/hevestarvey.jpg
+resources/hevestarvey.png
+resources/seahorse.png
+resources/shaders/base_lighting.vs
+resources/shaders/lighting.fs
