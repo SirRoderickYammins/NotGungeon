@@ -4,7 +4,6 @@
 #include <stdio.h>
 
 
-
 /* Calculate the lengths of the sides of a right triangle between
 the mouse cursor and the center of the player. */
 Vector2 MouseDelta(Vector2 gunArcCenter){  
@@ -18,7 +17,7 @@ Vector2 MouseDelta(Vector2 gunArcCenter){
 
 }
 
-void WeaponFire(Circle gunArc, float rawMouseAngleRadians) {
+Vector2 WeaponAngle(Circle gunArc, float rawMouseAngleRadians) {
 
     Vector2 mouseDelta = MouseDelta(gunArc.origin);
 
@@ -56,7 +55,7 @@ void WeaponFire(Circle gunArc, float rawMouseAngleRadians) {
 
 
 
-
+    return (Vector2){x, y};
 
 }
 
@@ -99,6 +98,23 @@ Vector2 RotationCalculator(Vector2 gunArcCenter){
 }
 
 
+void ProjectileMotion(Vector2 aimVector, Rectangle RoomBoundaries) {
+
+    Rectangle projectile = {aimVector.x, aimVector.y, 10.0f, 10.0f};
+
+    Vector2 weaponVelocityVector = {100.0f, 10.0f};
+
+    while(CheckCollisionRecs(projectile, RoomBoundaries)){
+        
+        DrawRectanglePro(projectile, (Vector2){0.0f, 0.0f}, 0.0f, RED);
+        projectile.x += weaponVelocityVector.x;
+
+    }
+
+}
+
+
+
 
 
 void PlayerControl(Player *player, Rectangle RoomBoundaries, float frameTime) {
@@ -132,9 +148,12 @@ void PlayerControl(Player *player, Rectangle RoomBoundaries, float frameTime) {
 
     player->gunArc.endAngle = RotationCalculator(player->gunArc.origin).x;
 
+    // Calculate the aim vector.
+    Vector2 aimVector = WeaponAngle(player->gunArc, RotationCalculator(player->gunArc.origin).y);
 
+    // Pass aim vector to shoot function.
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        WeaponFire(player->gunArc, RotationCalculator(player->gunArc.origin).y);
+        ProjectileMotion(aimVector, RoomBoundaries);
     }
 
 
