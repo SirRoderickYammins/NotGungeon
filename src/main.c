@@ -6,6 +6,9 @@
 #include "camera.h"
 
 
+#define PHYSAC_IMPLEMENTATION
+
+#include "physac.h"
 
 
 
@@ -21,14 +24,24 @@ int main(void)
 
     Circle gunArc = {60.0f, 70.0f, 90.0f, 0.0f, (Vector2){playerRect.x + 40.0f, playerRect.y + 40.0f}};
 
-    Player player = {0.0f, (Vector2){0, 0}, playerRect, gunArc};
-
     
+
+
+    PhysicsBody roomFloor = CreatePhysicsBodyRectangle((Vector2){0, h}, w, 70.0f, 1.0f);
+    PhysicsBody playerPhysicsBody = CreatePhysicsBodyRectangle((Vector2){w/2, h/2}, playerRect.width, playerRect.height, 1.0f);
+    roomFloor->enabled = false;
+    playerPhysicsBody->useGravity = false;
+
+    Player player = {playerPhysicsBody, playerRect, gunArc};
+
+    SetPhysicsGravity(0.0f, 1.0f);
 
     SetTargetFPS(GetMonitorRefreshRate(1));
 
     SetMouseCursor(MOUSE_CURSOR_CROSSHAIR);
     SetMouseScale(1.0, 1.0);
+
+    InitPhysics();
 
     while (!WindowShouldClose()){
 
@@ -36,21 +49,25 @@ int main(void)
         
         BeginDrawing();
 
-
-        DrawRectanglePro(player.playerRect, player.origin, 0.0f, RED);
-        DrawRing(player.gunArc.origin, player.gunArc.innerRadius, player.gunArc.outerRadius, 
-                 player.gunArc.startAngle, player.gunArc.endAngle, 40, RED);
+        DrawRectangleV(playerPhysicsBody->position, (Vector2){playerRect.width, playerRect.height}, RED);
 
 
-        PlayerControl(&player, RoomBoundaries, frameTime);
+        // DrawRectanglePro(player.playerRect, player.origin, 0.0f, RED);
+        // DrawRing(player.gunArc.origin, player.gunArc.innerRadius, player.gunArc.outerRadius, 
+        //          player.gunArc.startAngle, player.gunArc.endAngle, 40, RED);
+
+
+        PlayerControl(&player, frameTime);
 
        
         
         ClearBackground(RAYWHITE);
+        UpdatePhysics();
         EndDrawing();
 
     }
 
+    ClosePhysics();
 
     return 0;
 }

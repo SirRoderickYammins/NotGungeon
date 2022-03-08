@@ -98,51 +98,25 @@ Vector2 RotationCalculator(Vector2 gunArcCenter){
 }
 
 
-void ProjectileMotion(Vector2 aimVector, Rectangle RoomBoundaries) {
-
-    Rectangle projectile = {aimVector.x, aimVector.y, 10.0f, 10.0f};
-
-    Vector2 weaponVelocityVector = {100.0f, 10.0f};
-
-    while(CheckCollisionRecs(projectile, RoomBoundaries)){
-        
-        DrawRectanglePro(projectile, (Vector2){0.0f, 0.0f}, 0.0f, RED);
-        projectile.x += weaponVelocityVector.x;
-
-    }
-
-}
 
 
 
+void PlayerControl(Player *player, float frameTime) {
 
-
-void PlayerControl(Player *player, Rectangle RoomBoundaries, float frameTime) {
-    // Establish coordinates for the CheckCollision fx to compare
-    Vector2 playerPosLeft = {player->playerRect.x, player->playerRect.y + player->playerRect.height/2};
-    Vector2 playerPosTop = {player->playerRect.x + player->playerRect.width/2, player->playerRect.y};
-    Vector2 playerPosRight = {player->playerRect.x + player->playerRect.width, player->playerRect.y + player->playerRect.height/2};
-    Vector2 playerPosBottom = {player->playerRect.x + player->playerRect.width/2, player->playerRect.y + player->playerRect.height};
-
-    bool inOrOutLeft = CheckCollisionPointRec(playerPosLeft, RoomBoundaries);
-    bool inOrOutTop = CheckCollisionPointRec(playerPosTop, RoomBoundaries);
-    bool inOrOutRight = CheckCollisionPointRec(playerPosRight, RoomBoundaries);
-    bool inOrOutBottom = CheckCollisionPointRec(playerPosBottom, RoomBoundaries);
-
-    if(IsKeyDown(KEY_A) && inOrOutLeft){
-        player->playerRect.x -= 500.0f * frameTime;
+    if(IsKeyDown(KEY_A)){
+        player->playerPhysicsBody->position.x -= 500.0f * frameTime;
         player->gunArc.origin.x -= 500.0f * frameTime;
     }
-    if(IsKeyDown(KEY_D) && inOrOutRight){
-        player->playerRect.x += 500.0f * frameTime;
+    if(IsKeyDown(KEY_D)){
+        player->playerPhysicsBody->position.x += 500.0f * frameTime;
         player->gunArc.origin.x += 500.0f * frameTime;
     }
-    if(IsKeyDown(KEY_W) && inOrOutTop){
-        player->playerRect.y -= 500.0f * frameTime;
+    if(IsKeyDown(KEY_W)){
+        player->playerPhysicsBody->position.y -= 500.0f * frameTime;
         player->gunArc.origin.y -= 500.0f * frameTime;
     }
-    if(IsKeyDown(KEY_S) && inOrOutBottom){
-        player->playerRect.y += 500.0f * frameTime;
+    if(IsKeyDown(KEY_S)){
+        player->playerPhysicsBody->position.y += 500.0f * frameTime;
         player->gunArc.origin.y += 500.0f * frameTime;
     }
 
@@ -150,12 +124,6 @@ void PlayerControl(Player *player, Rectangle RoomBoundaries, float frameTime) {
 
     // Calculate the aim vector.
     Vector2 aimVector = WeaponAngle(player->gunArc, RotationCalculator(player->gunArc.origin).y);
-
-    // Pass aim vector to shoot function.
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        ProjectileMotion(aimVector, RoomBoundaries);
-    }
-
 
 
     
