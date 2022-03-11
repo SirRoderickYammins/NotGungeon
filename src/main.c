@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdio.h>
 #include "camera.h"
+#include "map.h"
 
 
 #define PHYSAC_IMPLEMENTATION
@@ -16,52 +17,28 @@ int main(void)
 {
     const float w = 1600.0f;
     const float h = 1000.0f;
-    InitWindow(w, h, "Bubby Space Invaders");
+    InitWindow(w, h, "Bubby Dungeons");
 
-    Rectangle playerRect = {400.0f, 600.0f, 80.0f, 80.0f};
+    Texture2D tileMap = LoadTexture("../resources/tilemap.png");
 
-    Rectangle RoomBoundaries = {0.0f, 0.0f, w, h};
+    int tileSpace = tileMap.width/9;
 
-    Circle gunArc = {60.0f, 70.0f, 90.0f, 0.0f, (Vector2){playerRect.x + 40.0f, playerRect.y + 40.0f}};
-
-    
-
-
-    PhysicsBody roomFloor = CreatePhysicsBodyRectangle((Vector2){0, h}, w, 70.0f, 1.0f);
-    PhysicsBody playerPhysicsBody = CreatePhysicsBodyRectangle((Vector2){w/2, h/2}, playerRect.width, playerRect.height, 1.0f);
-    roomFloor->enabled = false;
-    playerPhysicsBody->useGravity = false;
-
-    Player player = {playerPhysicsBody, playerRect, gunArc};
-
-    SetPhysicsGravity(0.0f, 1.0f);
-
-    SetTargetFPS(GetMonitorRefreshRate(1));
-
-    SetMouseCursor(MOUSE_CURSOR_CROSSHAIR);
-    SetMouseScale(1.0, 1.0);
+    Rectangle tilePiece = {tileSpace, 0, tileMap.height/8, tileMap.width/9}; 
+    Rectangle tileFloor = {tileSpace*2, tileSpace, tileMap.height/8, tileMap.width/9}; 
 
     InitPhysics();
 
     while (!WindowShouldClose()){
 
         float frameTime = GetFrameTime();
-        
+
         BeginDrawing();
-
-        DrawRectangleV(playerPhysicsBody->position, (Vector2){playerRect.width, playerRect.height}, RED);
-
-
-        // DrawRectanglePro(player.playerRect, player.origin, 0.0f, RED);
-        // DrawRing(player.gunArc.origin, player.gunArc.innerRadius, player.gunArc.outerRadius, 
-        //          player.gunArc.startAngle, player.gunArc.endAngle, 40, RED);
-
-
-        PlayerControl(&player, frameTime);
-
+        DrawTextureRec(tileMap, tileFloor, (Vector2){400.f, 400.f}, WHITE);
+        DrawTextureRec(tileMap, tilePiece, (Vector2){400.f, 400.f}, WHITE);
+        
        
         
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
         UpdatePhysics();
         EndDrawing();
 
