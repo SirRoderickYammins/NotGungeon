@@ -20,4 +20,4 @@ typedef struct Player {
 
 } Player;
 
-void PlayerControl(Player *player, float frameTime);
+void PlayerControl(Vector2 *playerPosition, float frameTime);

@@ -3,7 +3,7 @@
 #include "raymath.h"
 #include <stdio.h>
 
-#define MOVEMENT_SPD 500.0f
+#define MOVEMENT_SPD 350.0f
 
 
 /* Calculate the lengths of the sides of a right triangle between
@@ -103,29 +103,22 @@ Vector2 RotationCalculator(Vector2 gunArcCenter){
 
 
 
-void PlayerControl(Player *player, float frameTime) {
+void PlayerControl(Vector2 *playerPosition, float frameTime) {
 
-    if(IsKeyDown(KEY_A) && !player->playerPhysicsBody->isGrounded){
-        player->playerPhysicsBody->position.x -= MOVEMENT_SPD * frameTime;
-        player->gunArc.origin.x -= MOVEMENT_SPD * frameTime;
+    if(IsKeyDown(KEY_A)){
+        playerPosition->x -= MOVEMENT_SPD * frameTime;
+        
     }
-    if(IsKeyDown(KEY_D) && !player->playerPhysicsBody->isGrounded){
-        player->playerPhysicsBody->position.x += MOVEMENT_SPD * frameTime;
-        player->gunArc.origin.x += MOVEMENT_SPD * frameTime;
+    if(IsKeyDown(KEY_D)){
+        playerPosition->x += MOVEMENT_SPD * frameTime;
     }
-    if(IsKeyDown(KEY_W) && !player->playerPhysicsBody->isGrounded){
-        player->playerPhysicsBody->position.y -= MOVEMENT_SPD * frameTime;
-        player->gunArc.origin.y -= MOVEMENT_SPD * frameTime;
+    if(IsKeyDown(KEY_W)){
+        playerPosition->y -= MOVEMENT_SPD * frameTime;
     }
-    if(IsKeyDown(KEY_S) && !player->playerPhysicsBody->isGrounded){
-        player->playerPhysicsBody->position.y += MOVEMENT_SPD * frameTime;
-        player->gunArc.origin.y += MOVEMENT_SPD * frameTime;
+    if(IsKeyDown(KEY_S)){
+        playerPosition->y += MOVEMENT_SPD * frameTime;
     }
 
-    player->gunArc.endAngle = RotationCalculator(player->gunArc.origin).x;
-
-    // Calculate the aim vector.
-    Vector2 aimVector = WeaponAngle(player->gunArc, RotationCalculator(player->gunArc.origin).y);
 
 
     
