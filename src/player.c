@@ -3,6 +3,9 @@
 #include "raymath.h"
 #include <stdio.h>
 
+#define MOVEMENT_SPD 350.0f
+
+
 
 /* Calculate the lengths of the sides of a right triangle between
 the mouse cursor and the center of the player. */
@@ -17,7 +20,7 @@ Vector2 MouseDelta(Vector2 gunArcCenter){
 
 }
 
-Vector2 WeaponAngle(Circle gunArc, float rawMouseAngleRadians) {
+Vector2 WeaponAngleDraw(Circle gunArc, float rawMouseAngleRadians) {
 
     Vector2 mouseDelta = MouseDelta(gunArc.origin);
 
@@ -51,15 +54,13 @@ Vector2 WeaponAngle(Circle gunArc, float rawMouseAngleRadians) {
         y = gunArc.origin.y - hypotenuse * sinf(rawMouseAngleRadians);
     }
 
-    DrawRectangle(x, y, 20, 20, BLACK);
+    DrawRectangleV((Vector2){x, y}, (Vector2){20.f, 20.f}, WHITE);
 
 
 
     return (Vector2){x, y};
 
 }
-
-
 
 
 Vector2 RotationCalculator(Vector2 gunArcCenter){
@@ -98,66 +99,30 @@ Vector2 RotationCalculator(Vector2 gunArcCenter){
 }
 
 
-void ProjectileMotion(Vector2 aimVector, Rectangle RoomBoundaries) {
+void PlayerControl(Player *player, float frameTime) {
 
-    Rectangle projectile = {aimVector.x, aimVector.y, 10.0f, 10.0f};
+    
 
-    Vector2 weaponVelocityVector = {100.0f, 10.0f};
-
-    while(CheckCollisionRecs(projectile, RoomBoundaries)){
+    if(IsKeyDown(KEY_A)){
+        player->playerRect->x -= MOVEMENT_SPD * frameTime;
+        player->gunArc.origin.x -= MOVEMENT_SPD * frameTime;
         
-        DrawRectanglePro(projectile, (Vector2){0.0f, 0.0f}, 0.0f, RED);
-        projectile.x += weaponVelocityVector.x;
-
     }
-
-}
-
-
-
-
-
-void PlayerControl(Player *player, Rectangle RoomBoundaries, float frameTime) {
-    // Establish coordinates for the CheckCollision fx to compare
-    Vector2 playerPosLeft = {player->playerRect.x, player->playerRect.y + player->playerRect.height/2};
-    Vector2 playerPosTop = {player->playerRect.x + player->playerRect.width/2, player->playerRect.y};
-    Vector2 playerPosRight = {player->playerRect.x + player->playerRect.width, player->playerRect.y + player->playerRect.height/2};
-    Vector2 playerPosBottom = {player->playerRect.x + player->playerRect.width/2, player->playerRect.y + player->playerRect.height};
-
-    bool inOrOutLeft = CheckCollisionPointRec(playerPosLeft, RoomBoundaries);
-    bool inOrOutTop = CheckCollisionPointRec(playerPosTop, RoomBoundaries);
-    bool inOrOutRight = CheckCollisionPointRec(playerPosRight, RoomBoundaries);
-    bool inOrOutBottom = CheckCollisionPointRec(playerPosBottom, RoomBoundaries);
-
-    if(IsKeyDown(KEY_A) && inOrOutLeft){
-        player->playerRect.x -= 500.0f * frameTime;
-        player->gunArc.origin.x -= 500.0f * frameTime;
+    if(IsKeyDown(KEY_D)){
+        player->playerRect->x += MOVEMENT_SPD * frameTime;
+        player->gunArc.origin.x += MOVEMENT_SPD * frameTime;
     }
-    if(IsKeyDown(KEY_D) && inOrOutRight){
-        player->playerRect.x += 500.0f * frameTime;
-        player->gunArc.origin.x += 500.0f * frameTime;
+    if(IsKeyDown(KEY_W)){
+        player->playerRect->y -= MOVEMENT_SPD * frameTime;
+        player->gunArc.origin.y -= MOVEMENT_SPD * frameTime;
     }
-    if(IsKeyDown(KEY_W) && inOrOutTop){
-        player->playerRect.y -= 500.0f * frameTime;
-        player->gunArc.origin.y -= 500.0f * frameTime;
-    }
-    if(IsKeyDown(KEY_S) && inOrOutBottom){
-        player->playerRect.y += 500.0f * frameTime;
-        player->gunArc.origin.y += 500.0f * frameTime;
-    }
-
-    player->gunArc.endAngle = RotationCalculator(player->gunArc.origin).x;
-
-    // Calculate the aim vector.
-    Vector2 aimVector = WeaponAngle(player->gunArc, RotationCalculator(player->gunArc.origin).y);
-
-    // Pass aim vector to shoot function.
-    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        ProjectileMotion(aimVector, RoomBoundaries);
+    if(IsKeyDown(KEY_S)){
+        player->playerRect->y += MOVEMENT_SPD * frameTime;
+        player->gunArc.origin.y += MOVEMENT_SPD * frameTime;
     }
 
 
-
+    WeaponAngleDraw(player->gunArc, RotationCalculator(player->gunArc.origin).y);
     
     
 }

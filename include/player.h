@@ -3,6 +3,7 @@
 
 #endif
 #include "raylib.h"
+#include "physac.h"
 
 typedef struct Circle {
     float innerRadius;
@@ -13,11 +14,11 @@ typedef struct Circle {
 } Circle;
 
 typedef struct Player {
-    float speed;
-    Vector2 origin;
-    Rectangle playerRect;
+    Rectangle *playerRect;
     Circle gunArc;
 
 } Player;
 
-void PlayerControl(Player *player, Rectangle RoomBoundaries, float frameTime);
+void PlayerControl(Player *player, float frameTime);
+
+extern Texture2D crossHair;
