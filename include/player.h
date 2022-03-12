@@ -14,10 +14,11 @@ typedef struct Circle {
 } Circle;
 
 typedef struct Player {
-    PhysicsBody playerPhysicsBody;
-    Rectangle playerRect;
+    Rectangle *playerRect;
     Circle gunArc;
 
 } Player;
 
-void PlayerControl(Vector2 *playerPosition, float frameTime);
+void PlayerControl(Player *player, float frameTime);
+
+extern Texture2D crossHair;

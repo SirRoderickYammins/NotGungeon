@@ -6,6 +6,7 @@
 #define MOVEMENT_SPD 350.0f
 
 
+
 /* Calculate the lengths of the sides of a right triangle between
 the mouse cursor and the center of the player. */
 Vector2 MouseDelta(Vector2 gunArcCenter){  
@@ -19,7 +20,7 @@ Vector2 MouseDelta(Vector2 gunArcCenter){
 
 }
 
-Vector2 WeaponAngle(Circle gunArc, float rawMouseAngleRadians) {
+Vector2 WeaponAngleDraw(Circle gunArc, float rawMouseAngleRadians) {
 
     Vector2 mouseDelta = MouseDelta(gunArc.origin);
 
@@ -53,15 +54,13 @@ Vector2 WeaponAngle(Circle gunArc, float rawMouseAngleRadians) {
         y = gunArc.origin.y - hypotenuse * sinf(rawMouseAngleRadians);
     }
 
-    DrawRectangle(x, y, 20, 20, BLACK);
+    DrawRectangleV((Vector2){x, y}, (Vector2){20.f, 20.f}, WHITE);
 
 
 
     return (Vector2){x, y};
 
 }
-
-
 
 
 Vector2 RotationCalculator(Vector2 gunArcCenter){
@@ -100,27 +99,30 @@ Vector2 RotationCalculator(Vector2 gunArcCenter){
 }
 
 
+void PlayerControl(Player *player, float frameTime) {
 
-
-
-void PlayerControl(Vector2 *playerPosition, float frameTime) {
+    
 
     if(IsKeyDown(KEY_A)){
-        playerPosition->x -= MOVEMENT_SPD * frameTime;
+        player->playerRect->x -= MOVEMENT_SPD * frameTime;
+        player->gunArc.origin.x -= MOVEMENT_SPD * frameTime;
         
     }
     if(IsKeyDown(KEY_D)){
-        playerPosition->x += MOVEMENT_SPD * frameTime;
+        player->playerRect->x += MOVEMENT_SPD * frameTime;
+        player->gunArc.origin.x += MOVEMENT_SPD * frameTime;
     }
     if(IsKeyDown(KEY_W)){
-        playerPosition->y -= MOVEMENT_SPD * frameTime;
+        player->playerRect->y -= MOVEMENT_SPD * frameTime;
+        player->gunArc.origin.y -= MOVEMENT_SPD * frameTime;
     }
     if(IsKeyDown(KEY_S)){
-        playerPosition->y += MOVEMENT_SPD * frameTime;
+        player->playerRect->y += MOVEMENT_SPD * frameTime;
+        player->gunArc.origin.y += MOVEMENT_SPD * frameTime;
     }
 
 
-
+    WeaponAngleDraw(player->gunArc, RotationCalculator(player->gunArc.origin).y);
     
     
 }
