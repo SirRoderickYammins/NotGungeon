@@ -14,6 +14,12 @@ ifeq ($(OS),Windows_NT)
 	LDFLAGS += -lopengl32 -lgdi32 -lwinmm
 endif
 
+ifeq ($(UNAME_S), Linux)
+	CC += gcc
+	LDFLAGS += -lGL -lm -lpthread -ldl -lrt -lX11
+endif
+
+
 SRC  = $(wildcard *.c)
 BIN = ../bin
 
