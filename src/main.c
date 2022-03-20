@@ -34,7 +34,9 @@ int main(void)
 
     int tileSpace = tileMap.width/9;
 
-    SetTargetFPS(144);
+    int FPS = GetMonitorRefreshRate(1);
+
+    SetTargetFPS(FPS);
 
     Rectangle tilePiece = {tileSpace * 7 , 0, tileMap.height/8, tileMap.width/9}; 
     Rectangle tileFloor = {tileSpace*7, tileSpace*4, tileMap.height/8, tileMap.width/9}; 
@@ -42,8 +44,6 @@ int main(void)
     int currentFrame = 0;
     int framesCounter = 0;
     int framesSpeed = 9;
-
-    
 
 
     InitPhysics();
@@ -57,7 +57,7 @@ int main(void)
         if (Bubby.isFacingLeft && playerPiece.width > 0) playerPiece.width = -playerPiece.width;
         else if (!Bubby.isFacingLeft && playerPiece.width < 0) playerPiece.width = -playerPiece.width;
 
-        if (framesCounter >= (144/framesSpeed)){
+        if (framesCounter >= (FPS/framesSpeed)){
             framesCounter = 0;
             currentFrame++;
 
@@ -75,15 +75,16 @@ int main(void)
         
 
         BeginDrawing();
-        
 
-            DrawTextureRec(tileMap, tileFloor, (Vector2){400.f, 400.f}, WHITE);
-            DrawTextureRec(tileMap, tilePiece, (Vector2){400.f, 400.f}, WHITE);
-            DrawTextureRec(playerTexture, playerPiece, (Vector2){playerRect.x, playerRect.y}, WHITE);
-            PlayerControl(&Bubby, frameTime);
-        
-            ClearBackground(BLACK);
-            UpdatePhysics();
+        Map_CreateRoom(&tileMap, 1);
+
+        // DrawTextureRec(tileMap, tileFloor, (Vector2){400.f, 400.f}, WHITE);
+        // DrawTextureRec(tileMap, tilePiece, (Vector2){400.f, 400.f}, WHITE);
+        DrawTextureRec(playerTexture, playerPiece, (Vector2){playerRect.x, playerRect.y}, WHITE);
+        PlayerControl(&Bubby, frameTime);
+
+        ClearBackground(BLACK);
+        UpdatePhysics();
         EndDrawing();
 
     }

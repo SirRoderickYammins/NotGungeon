@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #define MOVEMENT_SPD 250.0f
+#define RECOIL_SPD 1.f
 
 
 /* Calculate the lengths of the sides of a right triangle between
@@ -30,11 +31,13 @@ void PlayerRecoil(Player *player, float frameTime){
     float dx = mouseDelta.x;
     float dy = mouseDelta.y;
 
+
+
     // Apply recoil to position of player
-    player->playerRect->x += -dx * frameTime;
-    player->playerRect->y += dy * frameTime;
-    player->gunArc.origin.x += -dx * frameTime;
-    player->gunArc.origin.y += dy * frameTime;
+    player->playerRect->x += Clamp(-dx * frameTime, -RECOIL_SPD, RECOIL_SPD);
+    player->playerRect->y += Clamp(dy * frameTime, -RECOIL_SPD, RECOIL_SPD);
+    player->gunArc.origin.x += Clamp(-dx * frameTime, -RECOIL_SPD, RECOIL_SPD);
+    player->gunArc.origin.y += Clamp(dy * frameTime, -RECOIL_SPD, RECOIL_SPD);
 
 
 }
