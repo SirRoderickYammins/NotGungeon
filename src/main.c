@@ -15,8 +15,7 @@ Texture2D crossHair;
 
 int main(void)
 {
-    const float w = 1600.0f;
-    const float h = 1000.0f;
+    
     InitWindow(w, h, "Bubby Dungeons");
 
     Texture2D crossHair = LoadTexture("../resources/ui/crosshair_1.png");
@@ -31,18 +30,20 @@ int main(void)
     Rectangle playerRect = {400.0f, 400.0f, Player_TileSpaceX, Player_TileSpaceY};
 
     Circle gunArc = {70.0f, 80.0f, 90.0f, 0.0f, (Vector2){playerRect.x + Player_TileSpaceX/2, playerRect.y + Player_TileSpaceY/2}};
-    Player Bubby = {&playerRect, gunArc};
+    Player Bubby = {&playerRect, gunArc, false};
 
     int tileSpace = tileMap.width/9;
 
     SetTargetFPS(144);
 
-    Rectangle tilePiece = {tileSpace, 0, tileMap.height/8, tileMap.width/9}; 
-    Rectangle tileFloor = {tileSpace*2, tileSpace, tileMap.height/8, tileMap.width/9}; 
+    Rectangle tilePiece = {tileSpace * 7 , 0, tileMap.height/8, tileMap.width/9}; 
+    Rectangle tileFloor = {tileSpace*7, tileSpace*4, tileMap.height/8, tileMap.width/9}; 
 
     int currentFrame = 0;
     int framesCounter = 0;
     int framesSpeed = 9;
+
+    
 
 
     InitPhysics();
@@ -53,9 +54,8 @@ int main(void)
 
         framesCounter++;
 
-        if (IsKeyPressed(KEY_A) && playerPiece.width > 0) playerPiece.width = -playerPiece.width;
-
-        if (IsKeyPressed(KEY_D) && playerPiece.width < 0) playerPiece.width = -playerPiece.width;
+        if (Bubby.isFacingLeft && playerPiece.width > 0) playerPiece.width = -playerPiece.width;
+        else if (!Bubby.isFacingLeft && playerPiece.width < 0) playerPiece.width = -playerPiece.width;
 
         if (framesCounter >= (144/framesSpeed)){
             framesCounter = 0;
@@ -72,7 +72,7 @@ int main(void)
             }
         }
 
-        PlayerControl(&Bubby, frameTime);
+        
 
         BeginDrawing();
         
@@ -80,7 +80,7 @@ int main(void)
             DrawTextureRec(tileMap, tileFloor, (Vector2){400.f, 400.f}, WHITE);
             DrawTextureRec(tileMap, tilePiece, (Vector2){400.f, 400.f}, WHITE);
             DrawTextureRec(playerTexture, playerPiece, (Vector2){playerRect.x, playerRect.y}, WHITE);
-       
+            PlayerControl(&Bubby, frameTime);
         
             ClearBackground(BLACK);
             UpdatePhysics();

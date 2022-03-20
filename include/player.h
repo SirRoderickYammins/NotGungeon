@@ -16,6 +16,7 @@ typedef struct Circle {
 typedef struct Player {
     Rectangle *playerRect;
     Circle gunArc;
+    bool isFacingLeft;
 
 } Player;
 

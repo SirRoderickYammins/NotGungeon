@@ -3,8 +3,7 @@
 #include "raymath.h"
 #include <stdio.h>
 
-#define MOVEMENT_SPD 350.0f
-
+#define MOVEMENT_SPD 250.0f
 
 
 /* Calculate the lengths of the sides of a right triangle between
@@ -20,11 +19,31 @@ Vector2 MouseDelta(Vector2 gunArcCenter){
 
 }
 
-Vector2 WeaponAngleDraw(Circle gunArc, float rawMouseAngleRadians) {
 
-    Vector2 mouseDelta = MouseDelta(gunArc.origin);
+// Player recoil function for when fire button is pressed.
 
-    float hypotenuse = gunArc.outerRadius;
+void PlayerRecoil(Player *player, float frameTime){
+
+    Vector2 mouseDelta = MouseDelta(player->gunArc.origin);
+
+    // Mouse Deltas
+    float dx = mouseDelta.x;
+    float dy = mouseDelta.y;
+
+    // Apply recoil to position of player
+    player->playerRect->x += -dx * frameTime;
+    player->playerRect->y += dy * frameTime;
+    player->gunArc.origin.x += -dx * frameTime;
+    player->gunArc.origin.y += dy * frameTime;
+
+
+}
+
+Vector2 WeaponAngleDraw(Player *player, float rawMouseAngleRadians) {
+
+    Vector2 mouseDelta = MouseDelta(player->gunArc.origin);
+
+    float hypotenuse = player->gunArc.outerRadius;
 
     // Mouse Deltas
     float dx = mouseDelta.x;
@@ -35,23 +54,27 @@ Vector2 WeaponAngleDraw(Circle gunArc, float rawMouseAngleRadians) {
     float y;
 
     if (dx > 0 && dy > 0) {
-        x = hypotenuse * cosf(rawMouseAngleRadians) + gunArc.origin.x;
-        y = gunArc.origin.y - hypotenuse * sinf(rawMouseAngleRadians);
+        x = hypotenuse * cosf(rawMouseAngleRadians) + player->gunArc.origin.x;
+        y = player->gunArc.origin.y - hypotenuse * sinf(rawMouseAngleRadians);
+        player->isFacingLeft = false;
     }
 
     if (dx < 0 && dy > 0) {
-        x = gunArc.origin.x - hypotenuse * cosf(rawMouseAngleRadians);
-        y = gunArc.origin.y + hypotenuse * sinf(rawMouseAngleRadians);
+        x = player->gunArc.origin.x - hypotenuse * cosf(rawMouseAngleRadians);
+        y = player->gunArc.origin.y + hypotenuse * sinf(rawMouseAngleRadians);
+        player->isFacingLeft = true;
     }
 
     if (dx < 0 && dy < 0) {
-        x = gunArc.origin.x - hypotenuse * cosf(rawMouseAngleRadians); 
-        y = gunArc.origin.y + hypotenuse * sinf(rawMouseAngleRadians);
+        x = player->gunArc.origin.x - hypotenuse * cosf(rawMouseAngleRadians); 
+        y = player->gunArc.origin.y + hypotenuse * sinf(rawMouseAngleRadians);
+        player->isFacingLeft = true;
     }
 
     if (dx > 0 && dy < 0) {
-        x = hypotenuse * cosf(rawMouseAngleRadians) + gunArc.origin.x;
-        y = gunArc.origin.y - hypotenuse * sinf(rawMouseAngleRadians);
+        x = hypotenuse * cosf(rawMouseAngleRadians) + player->gunArc.origin.x;
+        y = player->gunArc.origin.y - hypotenuse * sinf(rawMouseAngleRadians);
+        player->isFacingLeft = false;
     }
 
     DrawRectangleV((Vector2){x, y}, (Vector2){20.f, 20.f}, WHITE);
@@ -101,7 +124,7 @@ Vector2 RotationCalculator(Vector2 gunArcCenter){
 
 void PlayerControl(Player *player, float frameTime) {
 
-    
+    if (IsKeyDown(KEY_SPACE)) PlayerRecoil(player, frameTime);
 
     if(IsKeyDown(KEY_A)){
         player->playerRect->x -= MOVEMENT_SPD * frameTime;
@@ -122,7 +145,7 @@ void PlayerControl(Player *player, float frameTime) {
     }
 
 
-    WeaponAngleDraw(player->gunArc, RotationCalculator(player->gunArc.origin).y);
+    WeaponAngleDraw(player, RotationCalculator(player->gunArc.origin).y);
     
     
 }

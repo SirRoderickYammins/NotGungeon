@@ -21,3 +21,10 @@ typedef enum TileID {
 
 } TileID;
 
+extern const float w;
+extern const float h;
+
+
+void Map_CreateRoom(Texture2D *tileMap);
+
+
