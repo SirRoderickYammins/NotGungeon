@@ -23,3 +23,9 @@ mingw32-make game
 ```
 
 The compiled game binary will be in the `bin` folder.
+
+### Linux and MacOS
+
+The above steps are exactly the same, except that you will not use mingw32. Instead, make and gcc (or cc for Mac) should already be installed.
+
+Therefore, just remove the `mingw32-` part of each command and replicate the above instructions.
