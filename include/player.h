@@ -17,6 +17,7 @@ typedef struct Player {
     Rectangle *playerRect;
     Circle gunArc;
     bool isFacingLeft;
+    PhysicsBody physicsBody;
 
 } Player;
 

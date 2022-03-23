@@ -19,7 +19,6 @@ int main(void)
     InitWindow(w, h, "Bubby Dungeons");
 
     Texture2D crossHair = LoadTexture("../resources/ui/crosshair_1.png");
-
     Texture2D tileMap = LoadTexture("../resources/tilemap.png");
     Texture2D playerTexture = LoadTexture("../resources/spritesheet.png");
 
@@ -29,8 +28,14 @@ int main(void)
     Rectangle playerPiece = {0, Player_TileSpaceY*5, 72.f, 72.f};
     Rectangle playerRect = {400.0f, 400.0f, Player_TileSpaceX, Player_TileSpaceY};
 
+    PhysicsBody bubbyPhysicsBody = CreatePhysicsBodyRectangle((Vector2){playerRect.x, playerRect.y}, Player_TileSpaceX, Player_TileSpaceY, 1.0f);
+
     Circle gunArc = {70.0f, 80.0f, 90.0f, 0.0f, (Vector2){playerRect.x + Player_TileSpaceX/2, playerRect.y + Player_TileSpaceY/2}};
-    Player Bubby = {&playerRect, gunArc, false};
+    Player Bubby = {&playerRect, gunArc, false, bubbyPhysicsBody};
+    PhysicsBody room = CreatePhysicsBodyRectangle((Vector2){0, 0}, w, h, 1.0f);
+    bubbyPhysicsBody->dynamicFriction = 10.5f;
+    bubbyPhysicsBody->staticFriction = 10.5f;
+    bubbyPhysicsBody->isGrounded = true;
 
     int tileSpace = tileMap.width/9;
 

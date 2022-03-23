@@ -41,10 +41,6 @@ void Map_CreateRoom(Texture2D *tileMap, int RoomID){
 
             }
 
-            if (j == 8 && i == 8){
-                DrawTextureRec(*tileMap, Floor2, floorPos, WHITE);
-            }
-
             DrawTextureRec(*tileMap, Walltop1, walltop, WHITE);
         }
 

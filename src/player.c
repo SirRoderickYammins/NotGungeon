@@ -7,6 +7,9 @@
 #define RECOIL_SPD 1.f
 
 
+
+
+
 /* Calculate the lengths of the sides of a right triangle between
 the mouse cursor and the center of the player. */
 Vector2 MouseDelta(Vector2 gunArcCenter){  
@@ -127,12 +130,13 @@ Vector2 RotationCalculator(Vector2 gunArcCenter){
 
 void PlayerControl(Player *player, float frameTime) {
 
+    player->playerRect->x = player->physicsBody->position.x;
+    player->gunArc.origin.x = player->physicsBody->position.x;
+
     if (IsKeyDown(KEY_SPACE)) PlayerRecoil(player, frameTime);
 
     if(IsKeyDown(KEY_A)){
-        player->playerRect->x -= MOVEMENT_SPD * frameTime;
-        player->gunArc.origin.x -= MOVEMENT_SPD * frameTime;
-        
+        PhysicsAddForce(player->physicsBody, (Vector2){-10.f, 0.f});
     }
     if(IsKeyDown(KEY_D)){
         player->playerRect->x += MOVEMENT_SPD * frameTime;
