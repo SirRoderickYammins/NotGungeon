@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "map.h"
 #include <stdio.h>
+#include "physac.h"
 
 #define MAPSTART_X 3
 #define MAPSTART_Y 3
@@ -14,7 +15,7 @@ void Map_CreateRoom(Texture2D *tileMap, int RoomID){
     int CellWidth = tileMap->width / 9;
     int CellHeight = tileMap->height / 8;
 
-    // Setting Dungeon Wall Rect
+    // This block below defines which part of the tile map the texture loads from
 
     Rectangle DungeonWall = {DUNGEONWALL_X * CellWidth, DUNGEONWALL_Y * CellHeight, CellWidth, CellHeight};
     Rectangle Stairs = {STAIRS_X * CellWidth, STAIRS_Y * CellHeight, CellWidth, CellHeight};
@@ -27,6 +28,7 @@ void Map_CreateRoom(Texture2D *tileMap, int RoomID){
     {
         Vector2 walltop2 = {CellWidth * i, CellHeight * (MAPSTART_Y - 2)};
         Vector2 DungeonWallVec = {CellWidth * i, CellHeight * (MAPSTART_Y - 1)};
+
 
         for (int j = MAPSTART_Y - 1; j < 11; j++){
 

@@ -32,10 +32,6 @@ int main(void)
 
     Circle gunArc = {70.0f, 80.0f, 90.0f, 0.0f, (Vector2){playerRect.x + Player_TileSpaceX/2, playerRect.y + Player_TileSpaceY/2}};
     Player Bubby = {&playerRect, gunArc, false, bubbyPhysicsBody};
-    PhysicsBody room = CreatePhysicsBodyRectangle((Vector2){0, 0}, w, h, 1.0f);
-    bubbyPhysicsBody->dynamicFriction = 10.5f;
-    bubbyPhysicsBody->staticFriction = 10.5f;
-    bubbyPhysicsBody->isGrounded = true;
 
     int tileSpace = tileMap.width/9;
 

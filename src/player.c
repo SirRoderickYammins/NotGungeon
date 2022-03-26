@@ -131,16 +131,14 @@ Vector2 RotationCalculator(Vector2 gunArcCenter){
 void PlayerControl(Player *player, float frameTime) {
 
     player->playerRect->x = player->physicsBody->position.x;
-    player->gunArc.origin.x = player->physicsBody->position.x;
 
     if (IsKeyDown(KEY_SPACE)) PlayerRecoil(player, frameTime);
 
     if(IsKeyDown(KEY_A)){
-        PhysicsAddForce(player->physicsBody, (Vector2){-10.f, 0.f});
+        player->physicsBody->position.x -= MOVEMENT_SPD * frameTime;
     }
     if(IsKeyDown(KEY_D)){
-        player->playerRect->x += MOVEMENT_SPD * frameTime;
-        player->gunArc.origin.x += MOVEMENT_SPD * frameTime;
+        player->physicsBody->position.x += MOVEMENT_SPD * frameTime;
     }
     if(IsKeyDown(KEY_W)){
         player->playerRect->y -= MOVEMENT_SPD * frameTime;
